@@ -14,8 +14,12 @@ ALWAYS
     END
 
     ACTION_IF GAME_IS bgee BEGIN
+      // Angel: We must check for presence of DLC zipfile *before* trying to
+      // assert SoD content.  WeiDU cannot process the zip file so it would
+      // not detect SoD to begin with, thus it would never actually check for
+      // the presence of the zip file.
+      ACTION_IF ((FILE_EXISTS ~dlc/sod-dlc.zip~) OR (FILE_EXISTS ~sod-dlc.zip~)) THEN BEGIN FAIL @3 END // DLC Merger check
       ACTION_IF GAME_INCLUDES sod BEGIN
-        ACTION_IF ((FILE_EXISTS ~dlc/sod-dlc.zip~) OR (FILE_EXISTS ~sod-dlc.zip~)) THEN BEGIN FAIL @3 END // DLC Merger check
         OUTER_SET game_includes_sod = 1
         PRINT @7
       END ELSE BEGIN
